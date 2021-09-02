@@ -1,0 +1,112 @@
+extensions:
+    ktpl_akeneo_trash-product-index:
+        module: pim/common/simple-view
+        targetZone: self
+        config:
+            template: pim/template/common/default-template
+        forwarded-events:
+            grid_load:start: grid_load:start
+            grid_load:complete: grid_load:complete
+
+    ktpl_akeneo_trash-product-index-grid-container:
+        module: pim/common/simple-view
+        parent: ktpl_akeneo_trash-product-index
+        targetZone: content
+        config:
+            template: pim/template/product/index
+            templateParams:
+                gridName: ktpl_akeneo_product_trash-grid
+
+    ktpl_akeneo_trash-product-index-user-navigation:
+        module: pim/menu/user-navigation
+        parent: ktpl_akeneo_trash-product-index
+        targetZone: user-menu
+        config:
+            userAccount: pim_menu.user.user_account
+            logout: pim_menu.user.logout
+
+    ktpl_akeneo_trash-product-index-grid-title:
+        module: pim/common/grid-title
+        parent: ktpl_akeneo_trash-product-index
+        targetZone: title
+        config:
+            title: pim_enrich.entity.product.page_title.index
+
+    ktpl_akeneo_trash-product-index-left-column:
+        module: pim/form/common/column
+        parent: ktpl_akeneo_trash-product-index
+        targetZone: column
+        config:
+          stateCode: product_index
+          navigationTitle: pim_menu.navigation.product
+
+    ktpl_akeneo_trash-product-index-column-inner:
+        module: pim/common/simple-view
+        parent: ktpl_akeneo_trash-product-index-left-column
+        targetZone: navigation
+        config:
+          template: pim/template/product/grid/column-inner
+
+    ktpl_akeneo_trash-product-index-breadcrumbs:
+        module: pim/common/breadcrumbs
+        parent: ktpl_akeneo_trash-product-index
+        targetZone: breadcrumbs
+        config:
+            tab: ktpl-akeneo_trash-menu-trash
+            item: ktpl-akeneo_trash-menu-trash-product
+            
+    ktpl_akeneo_trash-product-index-mass-actions:
+        module: pim/grid/mass-actions
+        parent: ktpl_akeneo_trash-product-index
+        targetZone: bottom-panel
+        config:
+            label: pim_datagrid.mass_action.selected.product
+
+    ktpl_akeneo_trash-product-index-grid-filters-column:
+        module: oro/datafilter/filters-column
+        parent: ktpl_akeneo_trash-product-index-column-inner
+        targetZone: manage-filters-button
+        config:
+          attributeFiltersRoute: pim_datagrid_productgrid_attributes_filters
+
+    ktpl_akeneo_trash-product-index-grid-filters-list:
+        module: oro/datafilter/filters-selector
+        parent: ktpl_akeneo_trash-product-index-column-inner
+        targetZone: filters
+
+    ktpl_akeneo_trash-product-index-actions-panel:
+        module: oro/datagrid/actions-panel
+        parent: ktpl_akeneo_trash-product-index-mass-actions
+        targetZone: actions-panel
+
+    ktpl_akeneo_trash-product-index-pagination:
+        module: oro/datagrid/pagination-input
+        parent: ktpl_akeneo_trash-product-index-grid-container
+        targetZone: toolbar
+        config:
+            gridName: ktpl_akeneo_product_trash-grid
+
+    ktpl_akeneo_trash-product-index-columns:
+        module: pim/datagrid/column-selector
+        parent: ktpl_akeneo_trash-product-index-grid-container
+        targetZone: toolbar
+        position: 10
+        config:
+            route: pim_datagrid_productgrid_available_columns
+
+    ktpl_akeneo_trash-product-index-display-selector:
+        module: pim/datagrid/display-selector
+        parent: ktpl_akeneo_trash-product-index
+        targetZone: search
+        position: 20
+        config:
+            gridName: ktpl_akeneo_product_trash-grid
+
+    ktpl_akeneo_trash-product-index-grid:
+        module: pim/grid/table
+        parent: ktpl_akeneo_trash-product-index-grid-container
+        targetZone: grid
+        config:
+            gridName: ktpl_akeneo_product_trash-grid
+            localeParamName: dataLocale
+            datagridLoadUrl: pim_datagrid_load

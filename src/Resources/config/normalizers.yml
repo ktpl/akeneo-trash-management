@@ -1,0 +1,12 @@
+services:
+    ktpl.akeneo_trash.normalizer.category:
+        class: 'KTPL\AkeneoTrashBundle\Normalizer\CategoryNormalizer'
+        arguments:
+            - '@pim_catalog.normalizer.standard.translation'
+            - '@pim_catalog.repository.category'
+
+    ktpl.akeneo_trash.normalizer.family_variant:
+        class: 'KTPL\AkeneoTrashBundle\Normalizer\FamilyVariantNormalizer'
+        arguments:
+            - '@pim_catalog.normalizer.standard.translation'
+            - '@pim_user.context.user'

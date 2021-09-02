@@ -1,0 +1,10 @@
+services:
+    ktpl.akeneo_trash.adapter.oro_to_pim_grid_filter:
+        class: 'KTPL\AkeneoTrashBundle\Adapter\OroToPimGridFilterAdapter'
+        arguments:
+            - '@pim_datagrid.extension.mass_action.dispatcher'
+
+    ktpl.akeneo_trash.adapter.items_counter:
+        class: 'KTPL\AkeneoTrashBundle\Adapter\ItemsCounter'
+        arguments:
+            - '@pim_enrich.doctrine.query.count_impacted_products'

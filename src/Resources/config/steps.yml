@@ -1,0 +1,160 @@
+parameters:
+    ktpl.akeneo_trash.delete_products_and_product_models.tasklet_name: 'delete_products_product_models_from_trash'
+    ktpl.akeneo_trash.restore_products_and_product_models.tasklet_name: 'restore_products_product_models_from_trash'
+    ktpl.akeneo_trash.delete_categories.tasklet_name: 'delete_categories_from_trash'
+    ktpl.akeneo_trash.restore_categories.tasklet_name: 'restore_categories_from_trash'
+    ktpl.akeneo_trash.delete_families.tasklet_name: 'delete_families_from_trash'
+    ktpl.akeneo_trash.restore_families.tasklet_name: 'restore_families_from_trash'
+    ktpl.akeneo_trash.delete_family_variants.tasklet_name: 'delete_family_variants_from_trash'
+    ktpl.akeneo_trash.restore_family_variants.tasklet_name: 'restore_family_variants_from_trash'
+services:
+    ktpl.akeneo_trash.step.delete_products_and_product_models.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.delete_products_and_product_models.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.delete_products_and_product_models'
+
+    ktpl.akeneo_trash.tasklet.delete_products_and_product_models:
+        class: 'Akeneo\Pim\Enrichment\Component\Product\Job\DeleteProductsAndProductModelsTasklet'
+        arguments:
+            - '@pim_catalog.query.product_and_product_model_query_builder_factory'
+            - '@ktpl.akeneo_trash.remover.product'
+            - '@ktpl.akeneo_trash.remover.product_model'
+            - '@pim_connector.doctrine.cache_clearer'
+            - '@pim_catalog.filter.chained'
+            - 100
+            - '@akeneo.pim.enrichment.product_model.query.count_product_models_and_children_product_models'
+            - '@akeneo.pim.enrichment.product_model.query.count_variant_products'
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'
+
+    ktpl.akeneo_trash.step.restore_products_and_product_models.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.restore_products_and_product_models.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.restore_products_and_product_models'
+
+    ktpl.akeneo_trash.tasklet.restore_products_and_product_models:
+        class: 'KTPL\AkeneoTrashBundle\Job\RestoreProductsAndProductModelsTasklet'
+        arguments:
+            - '@pim_catalog.query.product_and_product_model_query_builder_factory'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+            - '@pim_connector.doctrine.cache_clearer'
+            - '@pim_catalog.filter.chained'
+            - 100
+            - '@akeneo.pim.enrichment.product_model.query.count_product_models_and_children_product_models'
+            - '@akeneo.pim.enrichment.product_model.query.count_variant_products'
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'
+
+    ktpl.akeneo_trash.step.delete_categories.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.delete_categories.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.delete_categories'
+
+    ktpl.akeneo_trash.tasklet.delete_categories:
+        class: 'KTPL\AkeneoTrashBundle\Job\DeleteCategoriesTasklet'
+        arguments:
+            - '@pim_catalog.repository.category'
+            - '@ktpl.akeneo_trash.remover.category'
+            - '@pim_connector.doctrine.cache_clearer'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'
+
+    ktpl.akeneo_trash.step.restore_categories.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.restore_categories.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.restore_categories'
+
+    ktpl.akeneo_trash.tasklet.restore_categories:
+        class: 'KTPL\AkeneoTrashBundle\Job\RestoreCategoriesTasklet'
+        arguments:
+            - '@pim_catalog.repository.category'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+            - '@pim_connector.doctrine.cache_clearer'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'
+
+    ktpl.akeneo_trash.step.delete_families.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.delete_families.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.delete_families'
+
+    ktpl.akeneo_trash.tasklet.delete_families:
+        class: 'KTPL\AkeneoTrashBundle\Job\DeleteFamiliesTasklet'
+        arguments:
+            - '@pim_catalog.repository.family'
+            - '@ktpl.akeneo_trash.remover.family'
+            - '@pim_connector.doctrine.cache_clearer'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'
+
+    ktpl.akeneo_trash.step.restore_families.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.restore_families.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.restore_families'
+
+    ktpl.akeneo_trash.tasklet.restore_families:
+        class: 'KTPL\AkeneoTrashBundle\Job\RestoreFamiliesTasklet'
+        arguments:
+            - '@pim_catalog.repository.family'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+            - '@pim_connector.doctrine.cache_clearer'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'
+
+    ktpl.akeneo_trash.step.delete_family_variants.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.delete_family_variants.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.delete_family_variants'
+
+    ktpl.akeneo_trash.tasklet.delete_family_variants:
+        class: 'KTPL\AkeneoTrashBundle\Job\DeleteFamilyVariantsTasklet'
+        arguments:
+            - '@pim_catalog.repository.family_variant'
+            - '@ktpl.akeneo_trash.remover.family_variant'
+            - '@pim_connector.doctrine.cache_clearer'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'
+
+    ktpl.akeneo_trash.step.restore_family_variants.mass_edit:
+        class: '%pim_connector.step.tasklet.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.restore_family_variants.tasklet_name%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            - '@ktpl.akeneo_trash.tasklet.restore_family_variants'
+
+    ktpl.akeneo_trash.tasklet.restore_family_variants:
+        class: 'KTPL\AkeneoTrashBundle\Job\RestoreFamilyVariantsTasklet'
+        arguments:
+            - '@pim_catalog.repository.family_variant'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+            - '@pim_connector.doctrine.cache_clearer'
+            - 100
+            - '@akeneo_batch.job.job_stopper'
+            - '@akeneo_batch.job_repository'

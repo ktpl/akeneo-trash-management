@@ -1,0 +1,26 @@
+services:
+    ktpl.akeneo_trash.manager.akeneo_trash:
+        class: 'KTPL\AkeneoTrashBundle\Manager\AkeneoTrashManager'
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+            - '@ktpl.akeneo_trash.repository.akeneo_trash'
+            - '@ktpl.akeneo_trash.factory.akeneo_trash'
+            - '@security.token_storage'
+
+    akeneo.pim.enrichment.category.category_tree.list_root_categories_with_count_handler:
+        class: 'KTPL\AkeneoTrashBundle\Component\Category\CategoryTree\UseCase\ListRootCategoriesWithCountHandler'
+        arguments:
+            - '@pim_catalog.repository.category'
+            - '@pim_user.context.user'
+            - '@akeneo.pim.enrichment.category.category_tree.query.list_root_categories_with_count_including_sub_categories'
+            - '@akeneo.pim.enrichment.category.category_tree.query.list_root_categories_with_count_not_including_sub_categories'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    akeneo.pim.enrichment.category.category_tree.list_children_categories_with_count_handler:
+        class: 'KTPL\AkeneoTrashBundle\Component\Category\CategoryTree\UseCase\ListChildrenCategoriesWithCountHandler'
+        arguments:
+            - '@pim_catalog.repository.category'
+            - '@pim_user.context.user'
+            - '@akeneo.pim.enrichment.category.category_tree.query.list_children_categories_with_count_including_sub_categories'
+            - '@akeneo.pim.enrichment.category.category_tree.query.list_children_categories_with_count_not_including_sub_categories'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'

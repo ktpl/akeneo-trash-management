@@ -1,0 +1,106 @@
+parameters:
+    ktpl.akeneo_trash.job.name.delete_products_and_product_models: 'delete_products_product_models_from_trash'
+    ktpl.akeneo_trash.job.name.restore_products_and_product_models: 'restore_products_product_models_from_trash'
+    ktpl.akeneo_trash.job.name.delete_categories: 'delete_categories_from_trash'
+    ktpl.akeneo_trash.job.name.restore_categories: 'restore_categories_from_trash'
+    ktpl.akeneo_trash.job.name.delete_families: 'delete_families_from_trash'
+    ktpl.akeneo_trash.job.name.restore_families: 'restore_families_from_trash'
+    ktpl.akeneo_trash.job.name.delete_family_variants: 'delete_family_variants_from_trash'
+    ktpl.akeneo_trash.job.name.restore_family_variants: 'restore_family_variants_from_trash'
+    ktpl.akeneo_trash.connector_name.mass_edit: 'Akeneo Trash Mass Edit Connector'
+services:
+    ktpl.akeneo_trash.job.delete_products_and_product_models:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.delete_products_and_product_models%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.delete_products_and_product_models.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }
+    
+    ktpl.akeneo_trash.job.restore_products_and_product_models:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.restore_products_and_product_models%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.restore_products_and_product_models.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }
+    
+    ktpl.akeneo_trash.job.delete_categories:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.delete_categories%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.delete_categories.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }
+    
+    ktpl.akeneo_trash.job.restore_categories:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.restore_categories%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.restore_categories.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }
+    
+    ktpl.akeneo_trash.job.delete_families:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.delete_families%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.delete_families.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }
+    
+    ktpl.akeneo_trash.job.restore_families:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.restore_families%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.restore_families.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }
+
+    ktpl.akeneo_trash.job.delete_family_variants:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.delete_family_variants%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.delete_family_variants.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }
+    
+    ktpl.akeneo_trash.job.restore_family_variants:
+        class: '%pim_connector.job.simple_job.class%'
+        arguments:
+            - '%ktpl.akeneo_trash.job.name.restore_family_variants%'
+            - '@event_dispatcher'
+            - '@akeneo_batch.job_repository'
+            -
+                - '@ktpl.akeneo_trash.step.restore_family_variants.mass_edit'
+            - true
+        tags:
+            - { name: akeneo_batch.job, connector: '%ktpl.akeneo_trash.connector_name.mass_edit%', type: '%pim_enrich.job.mass_edit_type%' }

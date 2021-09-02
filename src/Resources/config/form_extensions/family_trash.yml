@@ -1,0 +1,74 @@
+extensions:
+    pim-ktpl_akeneo_trash_family-index:
+        module: pim/common/simple-view
+        config:
+            template: pim/template/common/default-template
+        forwarded-events:
+            grid_load:start: grid_load:start
+            grid_load:complete: grid_load:complete
+
+    pim-ktpl_akeneo_trash_family-index-grid-container:
+        module: pim/common/simple-view
+        parent: pim-ktpl_akeneo_trash_family-index
+        targetZone: content
+        config:
+            template: pim/template/form/index/index
+
+    pim-ktpl_akeneo_trash_family-index-user-navigation:
+        module: pim/menu/user-navigation
+        parent: pim-ktpl_akeneo_trash_family-index
+        targetZone: user-menu
+        config:
+            userAccount: pim_menu.user.user_account
+            logout: pim_menu.user.logout
+
+    pim-ktpl_akeneo_trash_family-index-grid-title:
+        module: pim/common/grid-title
+        parent: pim-ktpl_akeneo_trash_family-index
+        targetZone: title
+        config:
+            title: pim_enrich.entity.family.page_title.index
+
+    pim-ktpl_akeneo_trash_family-index-grid-breadcrumbs:
+        module: pim/common/breadcrumbs
+        parent: pim-ktpl_akeneo_trash_family-index
+        targetZone: breadcrumbs
+        config:
+            tab: ktpl-akeneo_trash-menu-trash
+            item: ktpl-akeneo_trash-menu-family
+
+    pim-ktpl_akeneo_trash_family-index-mass-actions:
+        module: pim/grid/mass-actions
+        parent: pim-ktpl_akeneo_trash_family-index
+        targetZone: bottom-panel
+        config:
+            label: pim_datagrid.mass_action.selected.family
+
+    pim-ktpl_akeneo_trash_family-index-actions-panel:
+        module: oro/datagrid/actions-panel
+        parent: pim-ktpl_akeneo_trash_family-index-mass-actions
+        targetZone: actions-panel
+
+    pim-ktpl_akeneo_trash_family-index-filters-list:
+        module: oro/datafilter/filters-list
+        parent: pim-ktpl_akeneo_trash_family-index-grid-container
+        targetZone: filters
+
+    pim-ktpl_akeneo_trash_family-index-filters-manage:
+        module: oro/datafilter/filters-button
+        parent: pim-ktpl_akeneo_trash_family-index-grid-container
+        targetZone: filters
+        
+    pim-ktpl_akeneo_trash_family-index-pagination:
+        module: oro/datagrid/pagination-input
+        parent: pim-ktpl_akeneo_trash_family-index-grid-container
+        targetZone: toolbar
+        config:
+            gridName: ktpl_akeneo_family_trash-grid
+
+    pim-ktpl_akeneo_trash_family-index-grid:
+        module: pim/form/common/index/grid
+        parent: pim-ktpl_akeneo_trash_family-index-grid-container
+        position: 1000
+        config:
+            alias: ktpl_akeneo_family_trash-grid

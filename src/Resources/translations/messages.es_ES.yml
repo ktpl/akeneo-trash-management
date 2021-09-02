@@ -1,0 +1,34 @@
+ktpl:
+  akeneo_trash:
+    acl:
+      akeneo_trash:
+        index: List Trash
+        category:
+          index: List categories in category trash grid
+          remove: Remove categories from akeneo
+        family:
+          index: List families in family trash grid
+          remove: Remove families from akeneo
+        family_variant:
+          index: List family variants in family variant trash grid
+          remove: Remove family variants from akeneo
+        product:
+          index: List products in product trash grid
+          remove: Remove products from akeneo
+        restore_trash: Restore item from trash
+  acl_group:
+    akeneo_trash: Trash Management
+job_execution:
+  summary:
+    deleted_categories: Deleted Categories
+    deleted_families: Deleted families
+    deleted_family_variants: Deleted family variants
+    restored_categories: Restored Categories
+    restored_families: Restored Familes
+    restored_family_variants: Restored Family Variants
+    restored_products: Restored Products
+    restored_product_models: Restored Product Models
+pim_datagrid:
+  cells:
+    type:
+      mass_restore: Mass Restore
