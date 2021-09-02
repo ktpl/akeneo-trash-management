@@ -1,0 +1,28 @@
+KTPL\AkeneoTrashBundle\Entity\AkeneoTrash:
+    type: entity
+    table: ktpl_akeneo_trash_management
+    changeTrackingPolicy: DEFERRED_EXPLICIT
+    repositoryClass: KTPL\AkeneoTrash\Repository\AkeneoTrashRepository
+    indexes:
+        ktpl_akeneo_trash_resource_name_resource_id:
+            columns:
+                - resource_name
+                - resource_id
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        author:
+            type: string
+        resourceName:
+            type: string
+            column: resource_name
+        resourceId:
+            type: string
+            column: resource_id
+            length: 24
+        options:
+            type: json
+    lifecycleCallbacks: { }

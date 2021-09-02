@@ -1,0 +1,49 @@
+ktpl_akeneo_trash_index:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.index
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_product_index:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.product.index
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_remove_product:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.product.remove
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_restore_trash:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.restore_trash
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_category_index:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.category.index
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_remove_category:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.category.remove
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_family_index:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.family.index
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_remove_family:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.family.remove
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_family_variant_index:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.family_variant.index
+    group_name: ktpl.acl_group.akeneo_trash
+
+ktpl_akeneo_trash_remove_family_variant:
+    type: action
+    label: ktpl.akeneo_trash.acl.akeneo_trash.family_variant.remove
+    group_name: ktpl.acl_group.akeneo_trash

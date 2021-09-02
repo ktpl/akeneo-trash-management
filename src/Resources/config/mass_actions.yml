@@ -1,0 +1,84 @@
+services:
+    pim_datagrid.extension.mass_action.dispatcher:
+        class: '%pim_datagrid.extension.mass_action.dispatcher.class%'
+        arguments:
+            - '@pim_datagrid.extension.mass_action.handler.registry'
+            - '@oro_datagrid.datagrid.manager'
+            - '@oro_datagrid.datagrid.request_params'
+            - '@oro_datagrid.mass_action.parameters_parser'
+            - ['product-grid', 'proposal-grid', 'published-product-grid', 'ktpl_akeneo_product_trash-grid']
+
+    # Handlers
+    pim_datagrid.extension.mass_action.handler.trash_delete:
+        class: '%pim_datagrid.extension.mass_action.handler.delete.class%'
+        arguments:
+            - '@pim_datagrid.datasource.result_record.hydrator.orm.object'
+            - '@translator'
+            - '@event_dispatcher'
+        tags:
+            - { name: pim_datagrid.extension.mass_action.handler, alias: trash_mass_delete }
+
+    pim_datagrid.extension.mass_action.handler.trash_restore:
+        class: 'KTPL\AkeneoTrashBundle\MassAction\Handler\RestoreMassActionHandler'
+        arguments:
+            - '@pim_datagrid.datasource.result_record.hydrator.orm.object'
+            - '@translator'
+            - '@event_dispatcher'
+        tags:
+            - { name: pim_datagrid.extension.mass_action.handler, alias: trash_mass_restore }
+
+    pim_datagrid.extension.mass_action.type.product_akeneo_trash_mass_delete:
+        public: true
+        class: '%pim_datagrid.extension.mass_action.type.delete.class%'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_mass_delete }
+            
+    pim_datagrid.extension.mass_action.type.product_akeneo_trash_mass_restore:
+        public: true
+        class: 'KTPL\AkeneoTrashBundle\MassAction\Actions\Ajax\RestoreMassAction'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_mass_restore }
+    
+    pim_datagrid.extension.mass_action.type.category_akeneo_trash_category_mass_delete:
+        public: true
+        class: '%pim_datagrid.extension.mass_action.type.delete.class%'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_category_mass_delete }
+            
+    pim_datagrid.extension.mass_action.type.category_akeneo_trash_category_mass_restore:
+        public: true
+        class: 'KTPL\AkeneoTrashBundle\MassAction\Actions\Ajax\RestoreMassAction'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_category_mass_restore }
+
+    pim_datagrid.extension.mass_action.type.family_akeneo_trash_family_mass_delete:
+        public: true
+        class: '%pim_datagrid.extension.mass_action.type.delete.class%'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_family_mass_delete }
+            
+    pim_datagrid.extension.mass_action.type.family_akeneo_trash_family_mass_restore:
+        public: true
+        class: 'KTPL\AkeneoTrashBundle\MassAction\Actions\Ajax\RestoreMassAction'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_family_mass_restore }
+    
+    pim_datagrid.extension.mass_action.type.family_variant_akeneo_trash_family_variant_mass_delete:
+        public: true
+        class: '%pim_datagrid.extension.mass_action.type.delete.class%'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_family_variant_mass_delete }
+            
+    pim_datagrid.extension.mass_action.type.family_variant_akeneo_trash_family_variant_mass_restore:
+        public: true
+        class: 'KTPL\AkeneoTrashBundle\MassAction\Actions\Ajax\RestoreMassAction'
+        shared: false
+        tags:
+            - { name: oro_datagrid.extension.mass_action.type, type: akeneo_trash_family_variant_mass_restore }

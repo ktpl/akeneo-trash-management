@@ -1,0 +1,29 @@
+services:
+    ktpl.akeneo_trash.connector.job.job_parameters.constraint_collection_provider.product_mass_edit:
+        class: 'Akeneo\Pim\Enrichment\Component\Product\Connector\Job\JobParameters\ConstraintCollectionProvider\ProductMassEdit'
+        arguments:
+            -
+                - 'delete_products_product_models_from_trash'
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    ktpl.akeneo_trash.connector.job.job_parameters.constraint_collection_provider.product_and_product_model_mass_restore:
+        class: 'Akeneo\Pim\Enrichment\Component\Product\Connector\Job\JobParameters\ConstraintCollectionProvider\ProductMassEdit'
+        arguments:
+            -
+                - 'restore_products_product_models_from_trash'
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }
+
+    ktpl.akeneo_trash.connector.job.job_parameters.constraint_collection_provider.commaon_mass_edit:
+        class: 'KTPL\AkeneoTrashBundle\Job\JobParameters\ConstraintCollectionProvider\CommonMassEdit'
+        arguments:
+            -
+                - 'delete_categories_from_trash'
+                - 'restore_categories_from_trash'
+                - 'delete_families_from_trash'
+                - 'restore_families_from_trash'
+                - 'delete_family_variants_from_trash'
+                - 'restore_family_variants_from_trash'
+        tags:
+            - { name: akeneo_batch.job.job_parameters.constraint_collection_provider }

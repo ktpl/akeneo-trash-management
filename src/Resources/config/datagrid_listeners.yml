@@ -1,0 +1,88 @@
+services:
+    ktpl.akeneo_trash.exclude_trash_product_from_product_grid:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\ExcludeTrashProductsFromGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.product-grid, method: onBuildAfter }
+    
+    ktpl.akeneo_trash.render_only_trash_product_in_product_grid:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\RenderOnlyTrashProductsInGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.ktpl_akeneo_product_trash-grid, method: onBuildAfter }
+    
+    ktpl.akeneo_trash.exclude_trash_product_from_association_product_picker_grid_after_listener:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\ExcludeTrashProductsFromGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+          - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.association-product-picker-grid, method: onBuildAfter }
+   
+    ktpl.akeneo_trash.exclude_trash_product_from_product_group_grid_after_listener:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\ExcludeTrashProductsFromGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+          - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.product-group-grid, method: onBuildAfter }
+    
+    ktpl.akeneo_trash.exclude_trash_product_from_association_product_model_grid_after_listener:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\ExcludeTrashProductsFromGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+          - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.association-product-model-grid, method: onBuildAfter }
+    
+    ktpl.akeneo_trash.exclude_trash_product_from_association_product_grid_after_listener:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\ExcludeTrashProductsFromGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+          - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.association-product-grid, method: onBuildAfter }
+
+    ktpl.akeneo_trash.event_listener.product_trash_grid_after_listener:
+        class: '%pim_datagrid.event_listener.add_parameters_to_product_grid.class%'
+        arguments:
+          - [dataLocale]
+          - '@oro_datagrid.datagrid.request_params'
+          - '@pim_catalog.context.catalog'
+          - '@pim_user.context.user'
+          - false
+          - '@request_stack'
+        tags:
+          - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.ktpl_akeneo_product_trash-grid, method: onBuildAfter }
+    
+    ktpl.akeneo_trash.event_listener.product_trash_grid_before_listener:
+        class: '%pim_datagrid.event_listener.configure_product_grid_listener.class%'
+        arguments:
+            - '@pim_datagrid.datagrid.configuration.product.context_configurator'
+            - '@pim_datagrid.datagrid.configuration.product.columns_configurator'
+            - '@pim_datagrid.datagrid.configuration.product.filters_configurator'
+            - '@pim_datagrid.datagrid.configuration.product.sorters_configurator'
+            - '@pim_datagrid.datagrid.configuration.product.selected_attributes_configurator'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.before.ktpl_akeneo_product_trash-grid, method: buildBefore }
+    
+    ktpl.akeneo_trash.exclude_trash_family_from_family_grid:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\ExcludeTrashFamiliesFromGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.family-grid, method: onBuildAfter }
+    
+    ktpl.akeneo_trash.render_only_trash_family_in_family_grid:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\RenderOnlyTrashFamilyInGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.ktpl_akeneo_family_trash-grid, method: onBuildAfter }
+
+    ktpl.akeneo_trash.exclude_trash_family_variants_from_family_variant_grid:
+        class: 'KTPL\AkeneoTrashBundle\EventListener\ExcludeTrashFamilyVariantsFromGridListener'
+        arguments:
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.family-variant-grid, method: onBuildAfter }
+    
+

@@ -1,0 +1,90 @@
+datagrid:
+    ktpl_akeneo_family_trash-grid:
+        options:
+            entityHint: family
+            locale_parameter: localeCode
+            manageFilters: false
+        source:
+            acl_resource: ktpl_akeneo_trash_family_index
+            type: pim_datasource_family
+        columns:
+            label:
+                label: Label
+                frontend_type: label
+            attributeAsLabel:
+                label: Attribute as label
+        properties:
+            id: ~
+            delete_link:
+                type: url
+                route: ktpl_akeneo_trash_family_rest_remove
+                params:
+                    - id
+            restore_link:
+                type: url
+                route: ktpl_akeneo_trash_rest_restore
+                params:
+                    - id
+        actions:
+            delete:
+                launcherOptions:
+                    className: AknIconButton AknIconButton--small AknIconButton--trash
+                type:  delete-family-trash
+                label: pim_common.delete
+                link:  delete_link
+                acl_resource: ktpl_akeneo_trash_remove_family
+            restore:
+                launcherOptions:
+                    className: AknIconButton AknIconButton--small AknIconButton--restore
+                type:  delete-restore-family-trash
+                label: pim_datagrid.actions.restore_trash
+                link:  restore_link
+                acl_resource: ktpl_akeneo_trash_restore_trash
+        sorters:
+            columns:
+                label:
+                    data_name: familyLabel
+                attributeAsLabel:
+                    data_name: f.attributeAsLabel
+            default:
+                label: '%oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC'
+        filters:
+            columns:
+                code:
+                    type: string
+                    label: pim_common.code
+                    data_name: f.code
+                label:
+                    type: search
+                    label: Label
+                    data_name: translation.label
+        mass_actions:
+            delete_families_from_trash:
+                type: akeneo_trash_family_mass_delete
+                label: pim_common.delete
+                entity_name: family
+                acl_resource: ktpl_akeneo_trash_remove_family
+                handler: trash_mass_delete
+                className: 'AknButton AknButton--important AknButtonList-item'
+                messages:
+                    confirm_title: pim_common.confirm_deletion
+                    confirm_content: pim_datagrid.mass_action.delete.confirm_content
+                    confirm_ok: pim_common.ok
+                    success: pim_datagrid.mass_action.delete.success
+                    error: pim_datagrid.mass_action.delete.error
+                    empty_selection: pim_datagrid.mass_action.delete.empty_selection
+
+            restore_families_from_trash:
+                type: akeneo_trash_family_mass_restore
+                label: pim_datagrid.actions.restore_trash
+                entity_name: family
+                acl_resource: ktpl_akeneo_trash_restore_trash
+                handler: trash_mass_restore
+                className: 'AknButton AknButton--action AknButtonList-item'
+                messages:
+                    confirm_title: ktpl.akeneo_trash.entity.confirm_restore
+                    confirm_content: ktpl.akeneo_trash.entity.confirm_content
+                    confirm_ok: pim_common.ok
+                    success: pim_datagrid.mass_action.delete.success
+                    error: pim_datagrid.mass_action.delete.error
+                    empty_selection: pim_datagrid.mass_action.delete.empty_selection

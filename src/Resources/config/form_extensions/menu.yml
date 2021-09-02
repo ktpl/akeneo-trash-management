@@ -1,0 +1,62 @@
+extensions:
+    ktpl-akeneo_trash-menu-trash:
+        module: pim/menu/tab
+        parent: pim-menu
+        position: 70
+        targetZone: mainMenu
+        aclResourceId: ktpl_akeneo_trash_index
+        config:
+            title: ktpl.akeneo_trash.menu.tab.trash
+            iconModifier: iconAkeneoTrash
+
+    ktpl-akeneo_trash-menu-trash-column:
+        module: pim/menu/column
+        parent: pim-menu
+        position: 500
+        targetZone: column
+        config:
+            tab: ktpl-akeneo_trash-menu-trash
+            navigationTitle: ktpl.akeneo_trash.navigation.trash
+
+    ktpl-akeneo_trash-menu-trash-navigation-block:
+        module: pim/menu/navigation-block
+        parent: ktpl-akeneo_trash-menu-trash-column
+        targetZone: navigation
+        config:
+            title: ktpl.akeneo_trash.navigation.trash
+
+    ktpl-akeneo_trash-menu-trash-product:
+        module: pim/menu/item
+        parent: ktpl-akeneo_trash-menu-trash-navigation-block
+        aclResourceId: ktpl_akeneo_trash_product_index
+        position: 0
+        config:
+            title: pim_enrich.entity.product.plural_label
+            to: ktpl_akeneo_trash_product_index
+
+    ktpl-akeneo_trash-menu-product-category:
+        module: pim/menu/item
+        parent: ktpl-akeneo_trash-menu-trash-navigation-block
+        aclResourceId: ktpl_akeneo_trash_category_index
+        position: 10
+        config:
+            title: pim_enrich.entity.category.plural_label
+            to: ktpl_akeneo_trash-category-index
+
+    ktpl-akeneo_trash-menu-family:
+        module: pim/menu/item
+        parent: ktpl-akeneo_trash-menu-trash-navigation-block
+        aclResourceId: ktpl_akeneo_trash_family_index
+        position: 20
+        config:
+            title: pim_enrich.entity.family.plural_label
+            to: ktpl_akeneo_trash-family-index
+
+    ktpl-akeneo_trash-menu-family-variant:
+        module: pim/menu/item
+        parent: ktpl-akeneo_trash-menu-trash-navigation-block
+        aclResourceId: ktpl_akeneo_trash_family_variant_index
+        position: 30
+        config:
+            title: pim_enrich.entity.family_variant.plural_label
+            to: ktpl_akeneo_trash-family_variant-index

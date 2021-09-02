@@ -1,0 +1,28 @@
+{
+    "name": "krishtechnolabs/akeneo-trash-bundle",
+    "description": "Akeneo Trash Management is a module that allows you to restore your deleted products, categories, families, and family variants from the Akeneo PIM setup.",
+    "keywords": ["akeneo", "trash", "management"],
+    "type": "library",
+    "minimum-stability": "stable",
+    "license": "OSL-3.0",
+    "authors": [
+      {
+        "name": "Krish Technolabs",
+        "email": "krishan.kant@krishtechnolabs.com"
+      }
+    ],
+    "autoload": {
+      "psr-4": {
+        "KTPL\\AkeneoTrashBundle\\": "src/"
+      }
+    },
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "git@github.com:ktpl/akeneo-trash-management.git"
+      }
+    ],
+    "require": {
+      "akeneo/pim-community-dev": "^4.0"
+    }
+  }

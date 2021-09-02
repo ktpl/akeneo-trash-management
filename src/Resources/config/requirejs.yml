@@ -1,0 +1,102 @@
+config:
+  config:
+    oro/datagrid/akeneo_trash_mass_delete-action:
+      jobInstanceCode: delete_products_product_models_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash_product_index
+      launchErrorLabel: pim_enrich.mass_edit.product.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.product.step.launched.label
+      confirmLabel: pim_enrich.entity.product_model.module.delete.confirm_for_products_and_product_models
+    oro/datagrid/akeneo_trash_mass_restore-action:
+      jobInstanceCode: restore_products_product_models_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash_product_index
+      launchErrorLabel: pim_enrich.mass_edit.product.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.product.step.launched.label
+      confirmLabel: ktpl.akeneo_trash.entity.confirm_content
+    oro/datagrid/akeneo_trash_category_mass_delete-action:
+      jobInstanceCode: delete_categories_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash-category-index
+      launchErrorLabel: pim_enrich.mass_edit.category.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.category.step.launched.label
+      confirmLabel: pim_enrich.entity.category.module.delete.category
+    oro/datagrid/akeneo_trash_category_mass_restore-action:
+      jobInstanceCode: restore_categories_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash-category-index
+      launchErrorLabel: pim_enrich.mass_edit.category.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.category.step.launched.label
+      confirmLabel: ktpl.akeneo_trash.entity.category.confirm_content
+    oro/datagrid/akeneo_trash_family_mass_delete-action:
+      jobInstanceCode: delete_families_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash-family-index
+      launchErrorLabel: pim_enrich.mass_edit.family.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.family.step.launched.label
+      confirmLabel: pim_enrich.entity.family.module.delete.family
+    oro/datagrid/akeneo_trash_family_mass_restore-action:
+      jobInstanceCode: restore_families_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash-family-index
+      launchErrorLabel: pim_enrich.mass_edit.family.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.family.step.launched.label
+      confirmLabel: ktpl.akeneo_trash.entity.family.confirm_content
+    oro/datagrid/akeneo_trash_family_variant_mass_delete-action:
+      jobInstanceCode: delete_family_variants_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash-family_variant-index
+      launchErrorLabel: pim_enrich.mass_edit.family_variant.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.family_variant.step.launched.label
+      confirmLabel: pim_enrich.entity.family_variant.module.delete.family_variant
+    oro/datagrid/akeneo_trash_family_variant_mass_restore-action:
+      jobInstanceCode: restore_family_variants_from_trash
+      route: pim_enrich_mass_edit_rest_launch
+      backRoute: ktpl_akeneo_trash-family_variant-index
+      launchErrorLabel: pim_enrich.mass_edit.family_variant.step.launch_error.label
+      launchedLabel: pim_enrich.mass_edit.family_variant.step.launched.label
+      confirmLabel: ktpl.akeneo_trash.entity.family_variant.confirm_content
+    pim/controller-registry:
+      controllers:
+        ktpl_akeneo_trash_product_index:
+          module: ktpl/akeneotrash/controller/trash-product/index
+          aclResourceId: ktpl_akeneo_trash_product_index
+          config:
+            gridExtension: ktpl_akeneo_trash-product-index
+            gridName: ktpl_akeneo_trash_product
+        ktpl_akeneo_trash-category-index:
+          module: pim/controller/common/index
+          aclResourceId: ktpl_akeneo_trash_category_index
+          config:
+            entity: ktpl_akeneo_trash_category
+        ktpl_akeneo_trash-family-index:
+          module: pim/controller/common/index
+          aclResourceId: ktpl_akeneo_trash_family_index
+          config:
+            entity: ktpl_akeneo_trash_family
+
+        ktpl_akeneo_trash-family_variant-index:
+          module: pim/controller/common/index
+          aclResourceId: ktpl_akeneo_trash_family_variant_index
+          config:
+            entity: ktpl_akeneo_trash_family_variant
+  paths:
+    ktpl/akeneotrash/controller/trash-product/index:        akeneotrash/js/controller/trash-product/index
+    oro/datagrid/akeneo_trash_mass_delete-action:           akeneotrash/js/datagrid/action/product-mass-delete-action
+    oro/datagrid/akeneo_trash_mass_restore-action:          akeneotrash/js/datagrid/action/product-mass-restore-action
+    oro/datagrid/akeneo_trash_category_mass_delete-action:  akeneotrash/js/datagrid/action/category-mass-delete-action
+    oro/datagrid/akeneo_trash_category_mass_restore-action: akeneotrash/js/datagrid/action/category-mass-restore-action
+    oro/datagrid/akeneo_trash_family_mass_delete-action:    akeneotrash/js/datagrid/action/family-mass-delete-action
+    oro/datagrid/akeneo_trash_family_mass_restore-action:   akeneotrash/js/datagrid/action/family-mass-restore-action
+    oro/datagrid/akeneo_trash_family_variant_mass_delete-action:    akeneotrash/js/datagrid/action/family_variant-mass-delete-action
+    oro/datagrid/akeneo_trash_family_variant_mass_restore-action:   akeneotrash/js/datagrid/action/family_variant-mass-restore-action
+    oro/datagrid/delete-product-trash-action:               akeneotrash/js/datagrid/action/delete-product-trash-action
+    oro/datagrid/delete-restore-product-trash-action:       akeneotrash/js/datagrid/action/restore-product-trash-action
+    oro/datagrid/delete-common-trash-action:                akeneotrash/js/datagrid/action/delete-common-trash-action
+    oro/datagrid/delete-restore-common-trash-action:        akeneotrash/js/datagrid/action/restore-common-trash-action
+    oro/datagrid/delete-category-trash-action:              akeneotrash/js/datagrid/action/delete-category-trash-action
+    oro/datagrid/delete-restore-category-trash-action:      akeneotrash/js/datagrid/action/restore-category-trash-action
+    oro/datagrid/delete-family-trash-action:                akeneotrash/js/datagrid/action/delete-family-trash-action
+    oro/datagrid/delete-restore-family-trash-action:        akeneotrash/js/datagrid/action/restore-family-trash-action
+    oro/datagrid/delete-family-variant-trash-action:                akeneotrash/js/datagrid/action/delete-family-variant-trash-action
+    oro/datagrid/delete-restore-family-variant-trash-action:        akeneotrash/js/datagrid/action/restore-family-variant-trash-action

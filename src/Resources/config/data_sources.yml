@@ -1,0 +1,20 @@
+services:
+    ktpl.akeneo_trash.datasource.category:
+        class: 'KTPL\AkeneoTrashBundle\Datasource\CategoryTrashDatasource'
+        arguments:
+            - '@ktpl.akeneo_trash.repository.category'
+            - '@ktpl.akeneo_trash.repository.category'
+            - '@pim_datagrid.datasource.result_record.hydrator.default'
+            - '@ktpl.akeneo_trash.normalizer.category'
+            - '@pim_user.context.user'
+        tags:
+            - { name: oro_datagrid.datasource, type: ktpl_akeneo_trash_datasource_category }
+    
+    ktpl.akeneo_trash.datasource.family_variant:
+        class: '%pim_datagrid.datasource.family_variant.class%'
+        arguments:
+            - '@ktpl.akeneo_trash.repository.family_variant'
+            - '@pim_datagrid.datasource.result_record.hydrator.default'
+            - '@ktpl.akeneo_trash.normalizer.family_variant'
+        tags:
+            - { name: oro_datagrid.datasource, type: ktpl_akeneo_trash_datasource_variant }

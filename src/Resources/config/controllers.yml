@@ -1,0 +1,28 @@
+services:
+    ktpl.akeneo_trash.controller.akeneo_trash:
+        public: true
+        class: 'KTPL\AkeneoTrashBundle\Controller\AkeneoTrashController'
+        arguments:
+            - '@pim_catalog.repository.product'
+            - '@pim_catalog.repository.product_model'
+            - '@ktpl.akeneo_trash.remover.product'
+            - '@ktpl.akeneo_trash.remover.product_model'
+            - '@akeneo_elasticsearch.client.product_and_product_model'
+            - '@pim_catalog.filter.chained'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+            - '@pim_catalog.repository.category'
+            - '@ktpl.akeneo_trash.remover.category'
+            - '@pim_catalog.repository.family'
+            - '@ktpl.akeneo_trash.remover.family'
+            - '@pim_catalog.repository.family_variant'
+            - '@ktpl.akeneo_trash.remover.family_variant'
+
+    ktpl.akeneo_trash.controller.rest.mass_edit:
+        public: true
+        class: 'KTPL\AkeneoTrashBundle\Controller\InternalApi\MassEditController'
+        arguments:
+            - '@oro_datagrid.mass_action.parameters_parser'
+            - '@ktpl.akeneo_trash.adapter.oro_to_pim_grid_filter'
+            - '@pim_enrich.mass_edit_action.operation_authenticated_job_launcher'
+            - '@pim_enrich.converter.mass_operation'
+            - '@ktpl.akeneo_trash.adapter.items_counter'

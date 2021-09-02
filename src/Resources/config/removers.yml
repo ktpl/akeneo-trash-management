@@ -1,0 +1,80 @@
+services:
+    pim_catalog.remover.product:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BaseRemover'
+        arguments:
+            - '@pim_catalog.object_manager.product'
+            - '@event_dispatcher'
+            - '%pim_catalog.model.product.interface%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    pim_catalog.remover.product_model:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BaseRemover'
+        arguments:
+            - '@pim_catalog.object_manager.product'
+            - '@event_dispatcher'
+            - '%pim_catalog.model.product_model.interface%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    pim_catalog.remover.category:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BaseRemover'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - '%pim_catalog.entity.category.class%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    pim_catalog.remover.family:
+        class: 'KTPL\AkeneoTrashBundle\Remover\FamilyRemover'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - '@pim_catalog.doctrine.query.count_products_with_family'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    pim_catalog.remover.family_variant:
+        class: 'KTPL\AkeneoTrashBundle\Remover\FamilyVariantRemover'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - '@pim_catalog.doctrine.query.count_entity_with_family_variant'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    ktpl.akeneo_trash.remover.product:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BasePermanentRemover'
+        arguments:
+            - '@pim_catalog.object_manager.product'
+            - '@event_dispatcher'
+            - '%pim_catalog.model.product.interface%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    ktpl.akeneo_trash.remover.product_model:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BasePermanentRemover'
+        arguments:
+            - '@pim_catalog.object_manager.product'
+            - '@event_dispatcher'
+            - '%pim_catalog.model.product_model.interface%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    ktpl.akeneo_trash.remover.category:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BasePermanentRemover'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - '%pim_catalog.entity.category.class%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    ktpl.akeneo_trash.remover.family:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BasePermanentRemover'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - '%pim_catalog.entity.family.class%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'
+
+    ktpl.akeneo_trash.remover.family_variant:
+        class: 'KTPL\AkeneoTrashBundle\Remover\BasePermanentRemover'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@event_dispatcher'
+            - '%pim_catalog.entity.family_variant.class%'
+            - '@ktpl.akeneo_trash.manager.akeneo_trash'

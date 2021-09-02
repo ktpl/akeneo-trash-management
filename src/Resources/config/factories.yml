@@ -1,0 +1,5 @@
+services:
+    ktpl.akeneo_trash.factory.akeneo_trash:
+        class: 'KTPL\AkeneoTrashBundle\Factory\AkeneoTrashFactory'
+        arguments:
+            - 'KTPL\AkeneoTrashBundle\Entity\AkeneoTrash'

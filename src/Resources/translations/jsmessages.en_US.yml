@@ -1,0 +1,116 @@
+ktpl:
+  akeneo_trash:
+    menu:
+      tab:
+        trash: Trash Management
+    navigation:
+      trash: Trash Navigation
+    entity:
+      product:
+        flash:
+          restore:
+            success: Product successfully restored
+            fail: Error in restoring product
+        restore:
+          confirm: Are you sure you want to restore this product?
+      product_model:
+        flash:
+          restore:
+            success: Product model successfully restored
+            fail: Error in restoring product model
+        restore:
+          confirm: Are you sure you want to restore this product model?
+      category:
+        flash:
+          restore:
+            success: Category successfully restored
+            fail: Error in restoring category
+        confirm_content: Are you sure you want to restore the selected categories?
+        restore:
+          confirm: Are you sure you want to restore this category?
+      family:
+        flash:
+          restore:
+            success: Family successfully restored
+            fail: Error in restoring family
+        confirm_content: Are you sure you want to restore the selected families?
+        restore:
+          confirm: Are you sure you want to restore this family?
+      family_variant:
+        flash:
+          restore:
+            success: Family variant successfully restored
+            fail: Error in restoring family variant
+        confirm_content: Are you sure you want to restore the selected family variants?
+        restore:
+          confirm: Are you sure you want to restore this family variant?
+      confirm_restore: Confirm restore
+      confirm_content: Are you sure you want to restore the selected products and product models?
+pim_datagrid:
+  actions:
+    restore_trash: Restore
+  mass_action:
+    mass_restore: Mass restore
+    selected:
+      category: "]-Inf, 1]{{ count }} category selected|]1, Inf[{{ count }} categories selected"
+      family_variant: "]-Inf, 1]{{ count }} family variant selected|]1, Inf[{{ count }} family variants selected"
+pim_title:
+  ktpl_akeneo_trash_product_index: Trash Management | Products
+  ktpl_akeneo_trash-category-index: Trash Management | Categories
+  ktpl_akeneo_trash-family-index: Trash Management | Families
+  ktpl_akeneo_trash-family_variant-index: Trash Management | Family variants
+pim_enrich:
+  entity:
+    category:
+      module:
+        delete:
+          confirm: Are you sure you want to delete the category? All sub-categories will be deleted. Products in these categories will not be deleted.
+          category: Are you sure you want to delete the selecetd categories? All sub-categories will be deleted. Products in these categories will not be deleted.
+      flash:
+        delete:
+          success: Category successfully removed
+      page_title:
+        index: "]-Inf, 1]{{ count }} category|]1, Inf[{{ count }} categories"
+    family:
+      module:
+        delete:
+          confirm: Are you sure you want to delete this family?
+          family: Are you sure you want to delete the selecetd families?
+      flash:
+        delete:
+          success: Family successfully removed
+      page_title:
+        index: "]-Inf, 1]{{ count }} result|]1, Inf[{{ count }} results"
+    family_variant:
+      module:
+        delete:
+          confirm: Are you sure you want to delete this family variant?
+          family_variant: Are you sure you want to delete the selecetd family variants?
+      flash:
+        delete:
+          success: Family variant successfully removed
+      page_title:
+        index: "]-Inf, 1]{{ count }} family variant|]1, Inf[{{ count }} family variants"
+      plural_label: Family variants
+  mass_edit:
+    category:
+      step:
+          launch_error:
+              label: An error occurred during the launching of the mass edit operation
+          launched:
+              label: The bulk action "{{ operation }}" has been launched. You will be notified when it is done.
+    family_variant:
+      step:
+        launch_error:
+              label: An error occurred during the launching of the mass edit operation
+        launched:
+            label: The bulk action "{{ operation }}" has been launched. You will be notified when it is done.
+batch_jobs:
+  default_steps:
+    delete_categories_from_trash: Mass delete categories
+    delete_families_from_trash: Mass delete families
+    delete_family_variants_from_trash: Mass delete family variants
+    restore_categories_from_trash: Mass restore categories
+    restore_families_from_trash: Mass restore families
+    restore_family_variants_from_trash: Mass restore family variants
+    restore_products_product_models_from_trash: Mass restore products
