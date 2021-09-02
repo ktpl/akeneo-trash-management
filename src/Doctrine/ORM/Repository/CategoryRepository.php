@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use KTPL\AkeneoTrashBundle\Entity\AkeneoTrash;
+use KTPL\AkeneoTrashBundle\Manager\AkeneoTrashManager;
 
 /**
  * Category repository
@@ -23,6 +23,19 @@ use KTPL\AkeneoTrashBundle\Entity\AkeneoTrash;
 class CategoryRepository extends BaseCategoryRepository
 {
     const CATEGORY_RESOURCE_NAME = 'category';
+
+    /** @var AkeneoTrashManager*/
+    protected $akeneoTrashManager;
+
+    /**
+     * Set akeneo trash manager service
+     *
+     * @param AkeneoTrashManager $akeneoTrashManager
+     */
+    public function setAkeneoTrashManager(AkeneoTrashManager $akeneoTrashManager)
+    {
+        $this->akeneoTrashManager = $akeneoTrashManager;
+    }
 
     /**
      * {@inheritdoc}
@@ -214,27 +227,10 @@ class CategoryRepository extends BaseCategoryRepository
      */
     protected function getAllTrashCategoriesCodes()
     {
-        $repository = $this->_em->getRepository('\KTPL\AkeneoTrashBundle\Entity\AkeneoTrash');
-        $resourceName = 'Akeneo\Pim\Enrichment\Component\Category\Model\Category';
-        $qb= $this->_em->createQueryBuilder()
-            ->select('r.code as code')
-            ->from($resourceName, 'r');
-
-        $result = $qb->innerJoin(
-            AkeneoTrash::class,
-            'ktpltrash',
-            'WITH',
-            'ktpltrash.resourceId = r.id'
-        )
-            ->andWhere(
-                $qb->expr()->andX(
-                    $qb->expr()->eq('ktpltrash.resourceName', ':objectClass'),
-                )
-            )
-            ->setParameter(':objectClass', $resourceName)
-            ->getQuery()
-            ->getResult();
-
-        return array_column($result, 'code');
+        return $this->akeneoTrashManager->getTrashResourcesCode(
+            [
+                self::CATEGORY_RESOURCE_NAME
+            ]
+        );
     }
 }

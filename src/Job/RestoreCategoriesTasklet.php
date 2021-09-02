@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace KTPL\AkeneoTrashBundle\Job;
 
+use Akeneo\Tool\Component\Batch\Item\TrackableTaskletInterface;
 use Akeneo\Tool\Component\Batch\Job\JobRepositoryInterface;
+use Akeneo\Tool\Component\Batch\Job\JobStopper;
 use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use Akeneo\Tool\Component\Classification\Repository\CategoryRepositoryInterface;
 use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
@@ -19,7 +21,7 @@ use KTPL\AkeneoTrashBundle\Manager\AkeneoTrashManager;
  * @copyright 2021 Krishtechnolabs (https://www.krishtechnolabs.com/)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-class RestoreCategoriesTasklet implements TaskletInterface
+class RestoreCategoriesTasklet implements TaskletInterface, TrackableTaskletInterface
 {
     /** @var StepExecution */
     protected $stepExecution = null;
@@ -33,6 +35,9 @@ class RestoreCategoriesTasklet implements TaskletInterface
     /** @var EntityManagerClearerInterface */
     protected $cacheClearer;
 
+    /** @var JobStopper */
+    private $jobStopper;
+
     /** @var JobRepositoryInterface */
     private $jobRepository;
 
@@ -41,12 +46,14 @@ class RestoreCategoriesTasklet implements TaskletInterface
         AkeneoTrashManager $akeneoTrashManager,
         EntityManagerClearerInterface $cacheClearer,
         int $batchSize,
+        JobStopper $jobStopper,
         JobRepositoryInterface $jobRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->akeneoTrashManager = $akeneoTrashManager;
         $this->cacheClearer = $cacheClearer;
         $this->batchSize = $batchSize;
+        $this->jobStopper = $jobStopper;
         $this->jobRepository = $jobRepository;
     }
 
@@ -70,7 +77,7 @@ class RestoreCategoriesTasklet implements TaskletInterface
         }
 
         $categories = $this->findCategories();
-
+        $this->stepExecution->setTotalItems($categories->count());
         $this->stepExecution->addSummaryInfo('restored_categories', 0);
 
         $this->restore($categories);
@@ -102,7 +109,12 @@ class RestoreCategoriesTasklet implements TaskletInterface
             $loopCount++;
 
             if ($this->batchSizeIsReached($loopCount)) {
+                if ($this->jobStopper->isStopping($this->stepExecution)) {
+                    $this->jobStopper->stop($this->stepExecution);
+                    return;
+                }
                 $this->doRestore($entitiesToRestore);
+                $this->jobRepository->updateStepExecution($this->stepExecution);
                 $entitiesToRestore = [];
             }
             $categories->next();
@@ -126,6 +138,7 @@ class RestoreCategoriesTasklet implements TaskletInterface
 
         $this->akeneoTrashManager->removeItemsFromTrash($categories);
         $this->stepExecution->incrementSummaryInfo('restored_categories', $restoredCategoriesCount);
+        $this->stepExecution->incrementProcessedItems($restoredCategoriesCount);
 
         $this->cacheClearer->clear();
     }
@@ -138,5 +151,10 @@ class RestoreCategoriesTasklet implements TaskletInterface
     private function batchSizeIsReached(int $loopCount): bool
     {
         return 0 === $loopCount % $this->batchSize;
+    }
+
+    public function isTrackable(): bool
+    {
+        return true;
     }
 }

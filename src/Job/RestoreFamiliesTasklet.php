@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace KTPL\AkeneoTrashBundle\Job;
 
 use Akeneo\Pim\Structure\Component\Repository\FamilyRepositoryInterface;
+use Akeneo\Tool\Component\Batch\Item\TrackableTaskletInterface;
 use Akeneo\Tool\Component\Batch\Job\JobRepositoryInterface;
+use Akeneo\Tool\Component\Batch\Job\JobStopper;
 use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
 use Akeneo\Tool\Component\StorageUtils\Cache\EntityManagerClearerInterface;
@@ -19,7 +21,7 @@ use KTPL\AkeneoTrashBundle\Manager\AkeneoTrashManager;
  * @copyright 2021 Krishtechnolabs (https://www.krishtechnolabs.com/)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-class RestoreFamiliesTasklet implements TaskletInterface
+class RestoreFamiliesTasklet implements TaskletInterface, TrackableTaskletInterface
 {
     /** @var StepExecution */
     protected $stepExecution = null;
@@ -33,6 +35,9 @@ class RestoreFamiliesTasklet implements TaskletInterface
     /** @var EntityManagerClearerInterface */
     protected $cacheClearer;
 
+    /** @var JobStopper */
+    private $jobStopper;
+
     /** @var JobRepositoryInterface */
     private $jobRepository;
 
@@ -41,12 +46,14 @@ class RestoreFamiliesTasklet implements TaskletInterface
         AkeneoTrashManager $akeneoTrashManager,
         EntityManagerClearerInterface $cacheClearer,
         int $batchSize,
+        JobStopper $jobStopper,
         JobRepositoryInterface $jobRepository
     ) {
         $this->familyRepository = $familyRepository;
         $this->akeneoTrashManager = $akeneoTrashManager;
         $this->cacheClearer = $cacheClearer;
         $this->batchSize = $batchSize;
+        $this->jobStopper = $jobStopper;
         $this->jobRepository = $jobRepository;
     }
 
@@ -71,6 +78,7 @@ class RestoreFamiliesTasklet implements TaskletInterface
 
         $families = $this->findFamilies();
 
+        $this->stepExecution->setTotalItems($families->count());
         $this->stepExecution->addSummaryInfo('restored_families', 0);
 
         $this->restore($families);
@@ -102,7 +110,12 @@ class RestoreFamiliesTasklet implements TaskletInterface
             $loopCount++;
 
             if ($this->batchSizeIsReached($loopCount)) {
+                if ($this->jobStopper->isStopping($this->stepExecution)) {
+                    $this->jobStopper->stop($this->stepExecution);
+                    return;
+                }
                 $this->doRestore($entitiesToRestore);
+                $this->jobRepository->updateStepExecution($this->stepExecution);
                 $entitiesToRestore = [];
             }
             $families->next();
@@ -126,6 +139,7 @@ class RestoreFamiliesTasklet implements TaskletInterface
 
         $this->akeneoTrashManager->removeItemsFromTrash($families);
         $this->stepExecution->incrementSummaryInfo('restored_families', $restoredFamiliesCount);
+        $this->stepExecution->incrementProcessedItems($restoredFamiliesCount);
 
         $this->cacheClearer->clear();
     }
@@ -138,5 +152,10 @@ class RestoreFamiliesTasklet implements TaskletInterface
     private function batchSizeIsReached(int $loopCount): bool
     {
         return 0 === $loopCount % $this->batchSize;
+    }
+
+    public function isTrackable(): bool
+    {
+        return true;
     }
 }

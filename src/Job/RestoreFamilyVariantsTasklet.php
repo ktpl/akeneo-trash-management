@@ -7,6 +7,7 @@ namespace KTPL\AkeneoTrashBundle\Job;
 use Akeneo\Pim\Structure\Component\Repository\FamilyVariantRepositoryInterface;
 use Akeneo\Tool\Component\Batch\Item\TrackableTaskletInterface;
 use Akeneo\Tool\Component\Batch\Job\JobRepositoryInterface;
+use Akeneo\Tool\Component\Batch\Job\JobStopper;
 use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
 use Akeneo\Tool\Component\StorageUtils\Cache\EntityManagerClearerInterface;
@@ -20,7 +21,7 @@ use KTPL\AkeneoTrashBundle\Manager\AkeneoTrashManager;
  * @copyright 2021 Krishtechnolabs (https://www.krishtechnolabs.com/)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-class RestoreFamilyVariantsTasklet implements TaskletInterface
+class RestoreFamilyVariantsTasklet implements TaskletInterface, TrackableTaskletInterface
 {
     /** @var StepExecution */
     protected $stepExecution = null;
@@ -34,6 +35,9 @@ class RestoreFamilyVariantsTasklet implements TaskletInterface
     /** @var EntityManagerClearerInterface */
     protected $cacheClearer;
 
+    /** @var JobStopper */
+    private $jobStopper;
+
     /** @var JobRepositoryInterface */
     private $jobRepository;
 
@@ -42,12 +46,14 @@ class RestoreFamilyVariantsTasklet implements TaskletInterface
         AkeneoTrashManager $akeneoTrashManager,
         EntityManagerClearerInterface $cacheClearer,
         int $batchSize,
+        JobStopper $jobStopper,
         JobRepositoryInterface $jobRepository
     ) {
         $this->familyVariantRepository = $familyVariantRepository;
         $this->akeneoTrashManager = $akeneoTrashManager;
         $this->cacheClearer = $cacheClearer;
         $this->batchSize = $batchSize;
+        $this->jobStopper = $jobStopper;
         $this->jobRepository = $jobRepository;
     }
 
@@ -72,6 +78,7 @@ class RestoreFamilyVariantsTasklet implements TaskletInterface
 
         $familyVariants = $this->findFamilyVariants();
 
+        $this->stepExecution->setTotalItems($familyVariants->count());
         $this->stepExecution->addSummaryInfo('restored_family_variants', 0);
 
         $this->restore($familyVariants);
@@ -107,7 +114,12 @@ class RestoreFamilyVariantsTasklet implements TaskletInterface
             $loopCount++;
 
             if ($this->batchSizeIsReached($loopCount)) {
+                if ($this->jobStopper->isStopping($this->stepExecution)) {
+                    $this->jobStopper->stop($this->stepExecution);
+                    return;
+                }
                 $this->doRestore($entitiesToRestore);
+                $this->jobRepository->updateStepExecution($this->stepExecution);
                 $entitiesToRestore = [];
             }
             $familyVariants->next();
@@ -131,6 +143,7 @@ class RestoreFamilyVariantsTasklet implements TaskletInterface
 
         $this->akeneoTrashManager->removeItemsFromTrash($familyVariants);
         $this->stepExecution->incrementSummaryInfo('restored_family_variants', $restoredFamilyVariantCount);
+        $this->stepExecution->incrementProcessedItems($restoredFamilyVariantCount);
 
         $this->cacheClearer->clear();
     }
@@ -143,5 +156,10 @@ class RestoreFamilyVariantsTasklet implements TaskletInterface
     private function batchSizeIsReached(int $loopCount): bool
     {
         return 0 === $loopCount % $this->batchSize;
+    }
+
+    public function isTrackable(): bool
+    {
+        return true;
     }
 }
