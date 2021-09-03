@@ -10,9 +10,6 @@ datagrid:
                     label: pim_datagrid.display_selector.gallery
                     rowView: oro/datagrid/product-row
                     manageColumns: false
-            extraKeys:
-                - totalProducts
-                - totalProductModels
         source:
             acl_resource:      ktpl_akeneo_trash_product_index
             type:              pim_datasource_product
@@ -163,7 +160,7 @@ datagrid:
             columns:
                 family:
                     type:      product_family
-                    label:     'pim_datagrid.filters.family.label'
+                    label:     Family
                     data_name: family
                     options:
                         field_options:
@@ -172,7 +169,7 @@ datagrid:
                                 empty_choice: true
                 groups:
                     type:      product_groups
-                    label:     'pim_datagrid.filters.groups.label'
+                    label:     Groups
                     data_name: groups
                     options:
                         field_options:
@@ -180,7 +177,7 @@ datagrid:
                 enabled:
                     type:      product_enabled
                     ftype:     choice
-                    label:     'pim_datagrid.filters.enabled.label'
+                    label:     Status
                     data_name: enabled
                     options:
                         field_options:
@@ -189,24 +186,24 @@ datagrid:
                                 Disabled: 0
                 completeness:
                     type:      product_and_product_model_completeness
-                    label:     'pim_datagrid.filters.completeness.label'
+                    label:     Complete
                     data_name: ratio
                 created:
                     type:      product_date
                     ftype:     date
                     data_name: created
-                    label:     'pim_datagrid.filters.created.label'
+                    label:     Created At
                 updated:
                     type:      product_date
                     ftype:     date
                     data_name: updated
-                    label:     'pim_datagrid.filters.updated.label'
+                    label:     Updated At
                 label_or_identifier:
                     type: label_or_identifier
-                    label: 'pim_datagrid.filters.label_or_identifier.label'
+                    label: Label or identifier
                     data_name: label_or_identifier
                 parent:
-                    label:         'pim_datagrid.filters.parent.label'
+                    label:         Parent
                     data_name:     parent
                     type:          product_value_string
                     ftype:         parent
@@ -214,21 +211,3 @@ datagrid:
                         field_options:
                             attr:
                                 choice_list: true
-                identifier:
-                    type: product_value_string
-                    ftype: identifier
-                    label: 'pim_datagrid.filters.identifier.label'
-                    data_name: identifier
-                    options:
-                        field_options:
-                            attr:
-                                choice_list: true
-                entity_type:
-                    label: 'pim_datagrid.filters.entity_type.label'
-                    data_name: entity_type
-                    type: entity_type
-                    ftype: grouped-variant
-                    options:
-                        field_options:
-                            choices:
-                                'pim_datagrid.filters.entity_type.ungrouped': 'product'

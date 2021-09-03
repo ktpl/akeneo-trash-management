@@ -136,7 +136,6 @@ class InstallationCommand extends Command
 
         shell_exec('rm -rf public/dist-dev');
         shell_exec($yarn_pkg . ' run webpack-dev');
-        shell_exec($yarn_pkg . ' run update-extensions');
 
         $this->runCommand(
             'doctrine:schema:update',

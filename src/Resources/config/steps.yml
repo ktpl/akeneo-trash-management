@@ -27,7 +27,6 @@ services:
             - 100
             - '@akeneo.pim.enrichment.product_model.query.count_product_models_and_children_product_models'
             - '@akeneo.pim.enrichment.product_model.query.count_variant_products'
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'
 
     ktpl.akeneo_trash.step.restore_products_and_product_models.mass_edit:
@@ -48,7 +47,6 @@ services:
             - 100
             - '@akeneo.pim.enrichment.product_model.query.count_product_models_and_children_product_models'
             - '@akeneo.pim.enrichment.product_model.query.count_variant_products'
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'
 
     ktpl.akeneo_trash.step.delete_categories.mass_edit:
@@ -66,7 +64,6 @@ services:
             - '@ktpl.akeneo_trash.remover.category'
             - '@pim_connector.doctrine.cache_clearer'
             - 100
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'
 
     ktpl.akeneo_trash.step.restore_categories.mass_edit:
@@ -84,7 +81,6 @@ services:
             - '@ktpl.akeneo_trash.manager.akeneo_trash'
             - '@pim_connector.doctrine.cache_clearer'
             - 100
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'
 
     ktpl.akeneo_trash.step.delete_families.mass_edit:
@@ -102,7 +98,6 @@ services:
             - '@ktpl.akeneo_trash.remover.family'
             - '@pim_connector.doctrine.cache_clearer'
             - 100
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'
 
     ktpl.akeneo_trash.step.restore_families.mass_edit:
@@ -120,7 +115,6 @@ services:
             - '@ktpl.akeneo_trash.manager.akeneo_trash'
             - '@pim_connector.doctrine.cache_clearer'
             - 100
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'
 
     ktpl.akeneo_trash.step.delete_family_variants.mass_edit:
@@ -138,7 +132,6 @@ services:
             - '@ktpl.akeneo_trash.remover.family_variant'
             - '@pim_connector.doctrine.cache_clearer'
             - 100
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'
 
     ktpl.akeneo_trash.step.restore_family_variants.mass_edit:
@@ -156,5 +149,4 @@ services:
             - '@ktpl.akeneo_trash.manager.akeneo_trash'
             - '@pim_connector.doctrine.cache_clearer'
             - 100
-            - '@akeneo_batch.job.job_stopper'
             - '@akeneo_batch.job_repository'

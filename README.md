@@ -18,14 +18,14 @@ Installation instructions
 ```bash
 composer require krishtechnolabs/akeneo-trash-bundle
 ```
-* Register the module in the config/bundles.php
+* Register the module in the app/AppKernel.php and inside the registerProjectBundles function
 ``` php
-KTPL\AkeneoTrashBundle\AkeneoTrashBundle::class => ['all' => true],
+new KTPL\AkeneoTrashBundle\AkeneoTrashBundle(),
 ```
 * Now that you have activated and configured the bundle, now all you need to do is import the AkeneoTrashBundle routing files.
 
 ``` yml
-# config/routes/ktpl_akeneo_trash.yml
+# app/config/routing.yml
 ktpl_akeneo_trash:
     resource: "@AkeneoTrashBundle/Resources/config/routing.yml"
     prefix: /

@@ -11,9 +11,7 @@ use Akeneo\Pim\Enrichment\Component\Product\ProductAndProductModel\Query\CountVa
 use Akeneo\Pim\Enrichment\Component\Product\ProductModel\Query\CountProductModelsAndChildrenProductModelsInterface;
 use Akeneo\Pim\Enrichment\Component\Product\Query\Filter\Operators;
 use Akeneo\Pim\Enrichment\Component\Product\Query\ProductQueryBuilderFactoryInterface;
-use Akeneo\Tool\Component\Batch\Item\TrackableTaskletInterface;
 use Akeneo\Tool\Component\Batch\Job\JobRepositoryInterface;
-use Akeneo\Tool\Component\Batch\Job\JobStopper;
 use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
 use Akeneo\Tool\Component\StorageUtils\Cache\EntityManagerClearerInterface;
@@ -27,7 +25,7 @@ use KTPL\AkeneoTrashBundle\Manager\AkeneoTrashManager;
  * @copyright 2021 Krishtechnolabs (https://www.krishtechnolabs.com/)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-class RestoreProductsAndProductModelsTasklet implements TaskletInterface, TrackableTaskletInterface
+class RestoreProductsAndProductModelsTasklet implements TaskletInterface
 {
     /** @var StepExecution  */
     protected $stepExecution = null;
@@ -53,9 +51,6 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
     /** @var  CountVariantProductsInterface */
     private $countVariantProducts;
     
-    /** @var  JobStopper */
-    private $jobStopper;
-    
     /** @var  JobRepositoryInterface */
     private $jobRepository;
 
@@ -67,7 +62,6 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
         int $batchSize,
         CountProductModelsAndChildrenProductModelsInterface $countProductModelsAndChildrenProductModels,
         CountVariantProductsInterface $countVariantProducts,
-        JobStopper $jobStopper,
         JobRepositoryInterface $jobRepository
     ) {
         $this->pqbFactory = $pqbFactory;
@@ -77,7 +71,6 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
         $this->filter = $filter;
         $this->countProductModelsAndChildrenProductModels = $countProductModelsAndChildrenProductModels;
         $this->countVariantProducts = $countVariantProducts;
-        $this->jobStopper = $jobStopper;
         $this->jobRepository = $jobRepository;
     }
 
@@ -100,7 +93,6 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
             );
         }
 
-        $this->stepExecution->setTotalItems($this->countTotalItemsToRestore());
         $this->stepExecution->addSummaryInfo('restored_products', 0);
         $this->stepExecution->addSummaryInfo('restored_product_models', 0);
 
@@ -165,17 +157,11 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
                 $entitiesToRemove[] = $product;
             } else {
                 $this->stepExecution->incrementSummaryInfo('skip');
-                $this->stepExecution->incrementProcessedItems(1);
             }
 
             $loopCount++;
             if ($this->batchSizeIsReached($loopCount)) {
-                if ($this->jobStopper->isStopping($this->stepExecution)) {
-                    $this->jobStopper->stop($this->stepExecution);
-                    return;
-                }
                 $this->doRestore($entitiesToRemove);
-                $this->jobRepository->updateStepExecution($this->stepExecution);
                 $entitiesToRemove = [];
             }
             $products->next();
@@ -198,16 +184,14 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
         $products = $this->filterProducts($entities);
         $productModels = $this->filterProductModels($entities);
 
-        $restoredProductsCount = $this->countProductsToDelete($products, $productModels);
-        $restoredProductModelsCount = $this->countProductModelsToDelete($productModels);
+        $restoredProductsCount = $this->countProductsToRestore($products, $productModels);
+        $restoredProductModelsCount = $this->countProductModelsToRestore($productModels);
 
         $this->akeneoTrashManager->removeItemsFromTrash($products);
         $this->stepExecution->incrementSummaryInfo('restored_products', $restoredProductsCount);
-        $this->stepExecution->incrementProcessedItems($restoredProductsCount);
 
         $this->akeneoTrashManager->removeItemsFromTrash($productModels);
         $this->stepExecution->incrementSummaryInfo('restored_product_models', $restoredProductModelsCount);
-        $this->stepExecution->incrementProcessedItems($restoredProductModelsCount);
 
         $this->cacheClearer->clear();
     }
@@ -218,7 +202,7 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
      *
      * @return int
      */
-    private function countProductsToDelete(array $products, array $productModels): int
+    private function countProductsToRestore(array $products, array $productModels): int
     {
         return count($products) + $this->countVariantProducts->forProductModelCodes(
             array_map(
@@ -235,7 +219,7 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
      *
      * @return int
      */
-    private function countProductModelsToDelete(array $productModels): int
+    private function countProductModelsToRestore(array $productModels): int
     {
         return $this->countProductModelsAndChildrenProductModels->forProductModelCodes(
             array_map(
@@ -287,21 +271,5 @@ class RestoreProductsAndProductModelsTasklet implements TaskletInterface, Tracka
                 return $item instanceof ProductModelInterface;
             })
         );
-    }
-
-    private function countTotalItemsToRestore(): int
-    {
-        $filters = $this->stepExecution->getJobParameters()->get('filters');
-        $options = ['filters' => $filters];
-
-        $productQueryBuilder = $this->pqbFactory->create($options);
-        $items = $productQueryBuilder->execute();
-
-        return $items->count();
-    }
-
-    public function isTrackable(): bool
-    {
-        return true;
     }
 }

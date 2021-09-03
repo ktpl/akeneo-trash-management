@@ -2,7 +2,7 @@
 
 namespace KTPL\AkeneoTrashBundle\Adapter;
 
-use Akeneo\Pim\Enrichment\Bundle\Storage\Sql\ProductGrid\CountImpactedProducts;
+use Akeneo\Pim\Enrichment\Bundle\Doctrine\ORM\Query\CountImpactedProducts;
 use KTPL\AkeneoTrashBundle\Adapter\OroToPimGridFilterAdapter;
 
 /**

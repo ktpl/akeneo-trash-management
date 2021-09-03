@@ -73,7 +73,7 @@ define([
       getConfirmDialog: function (data) {
         this.confirmModal = Dialog.confirm(
           __(this.config.confirmLabel),
-          __('ktpl.akeneo_trash.entity.confirm_restore'),
+          __('pim_common.confirm_deletion'),
           this.doMassRestore.bind(this, data),
           this.getEntityHint(true)
         );

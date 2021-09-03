@@ -7,7 +7,6 @@ namespace KTPL\AkeneoTrashBundle\Normalizer;
 use Akeneo\UserManagement\Bundle\Context\UserContext;
 use Akeneo\Pim\Structure\Component\Model\FamilyVariantInterface;
 use Oro\Bundle\PimDataGridBundle\Normalizer\FamilyVariantNormalizer as BaseFamilyVariantNormalizer;
-use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
