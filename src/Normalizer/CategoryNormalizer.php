@@ -6,6 +6,7 @@ namespace KTPL\AkeneoTrashBundle\Normalizer;
 
 use Akeneo\Pim\Enrichment\Component\Category\Model\CategoryInterface;
 use Akeneo\Tool\Component\Classification\Repository\CategoryRepositoryInterface;
+use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * @copyright 2021 Krishtechnolabs (https://www.krishtechnolabs.com/)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-class CategoryNormalizer implements NormalizerInterface
+class CategoryNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
 {
     /** @var NormalizerInterface */
     private $translationNormalizer;
@@ -72,5 +73,10 @@ class CategoryNormalizer implements NormalizerInterface
     public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof CategoryInterface && 'datagrid' === $format;
+    }
+
+    public function hasCacheableSupportsMethod(): bool
+    {
+        return true;
     }
 }

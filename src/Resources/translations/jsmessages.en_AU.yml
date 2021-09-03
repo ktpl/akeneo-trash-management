@@ -52,8 +52,8 @@ pim_datagrid:
   mass_action:
     mass_restore: Mass restore
     selected:
-      category: selected categories
-      family_variant: family variants selected
+      category: "]-Inf, 1]{{ count }} category selected|]1, Inf[{{ count }} categories selected"
+      family_variant: "]-Inf, 1]{{ count }} family variant selected|]1, Inf[{{ count }} family variants selected"
 pim_title:
   ktpl_akeneo_trash_product_index: Trash Management | Products
   ktpl_akeneo_trash-category-index: Trash Management | Categories
