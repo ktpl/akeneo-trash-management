@@ -1,4 +1,4 @@
-# 1.0.2
+# 1.0.3
 - Compatible with Akeneo 5 CE
 
 ## Features
