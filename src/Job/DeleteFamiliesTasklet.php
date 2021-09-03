@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace KTPL\AkeneoTrashBundle\Job;
 
 use Akeneo\Pim\Structure\Component\Repository\FamilyRepositoryInterface;
+use Akeneo\Tool\Component\Batch\Item\TrackableTaskletInterface;
 use Akeneo\Tool\Component\Batch\Job\JobRepositoryInterface;
+use Akeneo\Tool\Component\Batch\Job\JobStopper;
 use Akeneo\Tool\Component\Batch\Model\StepExecution;
 use Akeneo\Tool\Component\Connector\Step\TaskletInterface;
 use Akeneo\Tool\Component\StorageUtils\Cache\EntityManagerClearerInterface;
@@ -19,7 +21,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @copyright 2021 Krishtechnolabs (https://www.krishtechnolabs.com/)
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-class DeleteFamiliesTasklet implements TaskletInterface
+class DeleteFamiliesTasklet implements TaskletInterface, TrackableTaskletInterface
 {
     /** @var StepExecution */
     protected $stepExecution = null;
@@ -33,6 +35,9 @@ class DeleteFamiliesTasklet implements TaskletInterface
     /** @var EntityManagerClearerInterface */
     protected $cacheClearer;
 
+    /** @var JobStopper */
+    private $jobStopper;
+
     /** @var JobRepositoryInterface */
     private $jobRepository;
 
@@ -41,12 +46,14 @@ class DeleteFamiliesTasklet implements TaskletInterface
         BulkRemoverInterface $familyRemover,
         EntityManagerClearerInterface $cacheClearer,
         int $batchSize,
+        JobStopper $jobStopper,
         JobRepositoryInterface $jobRepository
     ) {
         $this->familyRepository = $familyRepository;
         $this->familyRemover = $familyRemover;
         $this->cacheClearer = $cacheClearer;
         $this->batchSize = $batchSize;
+        $this->jobStopper = $jobStopper;
         $this->jobRepository = $jobRepository;
     }
 
@@ -71,6 +78,7 @@ class DeleteFamiliesTasklet implements TaskletInterface
 
         $families = $this->findFamilies();
 
+        $this->stepExecution->setTotalItems($families->count());
         $this->stepExecution->addSummaryInfo('deleted_families', 0);
 
         $this->delete($families);
@@ -102,7 +110,12 @@ class DeleteFamiliesTasklet implements TaskletInterface
             $loopCount++;
 
             if ($this->batchSizeIsReached($loopCount)) {
+                if ($this->jobStopper->isStopping($this->stepExecution)) {
+                    $this->jobStopper->stop($this->stepExecution);
+                    return;
+                }
                 $this->doDelete($entitiesToRemove);
+                $this->jobRepository->updateStepExecution($this->stepExecution);
                 $entitiesToRemove = [];
             }
             $families->next();
@@ -126,6 +139,7 @@ class DeleteFamiliesTasklet implements TaskletInterface
 
         $this->familyRemover->removeAll($families);
         $this->stepExecution->incrementSummaryInfo('deleted_families', $deletedFamiliesCount);
+        $this->stepExecution->incrementProcessedItems($deletedFamiliesCount);
 
         $this->cacheClearer->clear();
     }
@@ -138,5 +152,10 @@ class DeleteFamiliesTasklet implements TaskletInterface
     private function batchSizeIsReached(int $loopCount): bool
     {
         return 0 === $loopCount % $this->batchSize;
+    }
+
+    public function isTrackable(): bool
+    {
+        return true;
     }
 }

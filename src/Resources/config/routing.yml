@@ -26,7 +26,7 @@ ktpl_akeneo_trash_product_model_rest_remove:
 
 ktpl_akeneo_trash_rest_restore:
     path: /ktpl/akeneo-trash/restore/{resource}/{id}
-    defaults: { _controller: ktpl.akeneo_trash.controller.akeneo_trash:restoreTrashAction, _format: json, resource: product}
+    defaults: { _controller: ktpl.akeneo_trash.controller.akeneo_trash:restoreTrashAction, _format: json, resource: product }
     requirements:
         resource: '[a-zA-Z0-9_]+'
         id: '[0-9a-f]+'
