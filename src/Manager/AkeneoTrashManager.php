@@ -243,7 +243,7 @@ class AkeneoTrashManager
         )
             ->andWhere(
                 $qb->expr()->andX(
-                    $qb->expr()->eq('ktpltrash.resourceName', ':objectClass'),
+                    $qb->expr()->eq('ktpltrash.resourceName', ':objectClass')
                 )
             )
             ->setParameter(':objectClass', $resourceName)
